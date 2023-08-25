@@ -1,23 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Cards from "./components/Cards";
+import Navbar from "./components/Navbar";
+import Cart from "./components/Cart";
+import Products from "./components/products";
+
+import "./App.css";
+
+import { useFetch } from "./hooks/useFetch";
+import { useCart } from "./hooks/useCart";
 
 function App() {
+  const {products} = useFetch();
+  const {cart , addtoCart} = useCart();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Router>
+        <div>
+          <Navbar count={cart.length} />   
+            <Routes>
+              <Route
+                path="/"
+                element={<Cards products={products} addtoCart={addtoCart} />}
+              />
+              <Route
+                path="/products/:id"
+                element={<Products products={products} />}
+              />
+              <Route
+                path="/cart"
+                element={<Cart cart={cart} />}
+              />
+            </Routes>
+        </div>
+      </Router>
     </div>
   );
 }
